@@ -301,6 +301,50 @@ Use the **FFT Spectrum Visualizer** before and after the chain to verify the cha
 
 ---
 
+---
+
+### Spectral Histogram Match
+
+Matches the statistical distribution of FFT coefficient magnitudes from `image_source` to `image_target` — the frequency-domain analogue of histogram matching.
+
+Unlike pixel-space histogram matching, **colour and spatial structure are not affected** — only the distribution of spectral energy changes. Phase is always preserved, so edges, object positions, and generated content survive intact.
+
+**Pre-processing use:** make a synthetic or AI-generated image spectrally indistinguishable from a natural photograph before VAE encoding.
+
+**Post-processing use:** give a generated image the same grain and texture character as the source, without altering generated colours or content.
+
+<p align="center">
+  <img src="docs/histogram_match_demo.png" alt="Histogram Match: natural target / AI source / global match / stratified match" width="900"/>
+</p>
+
+*Left to right: natural photo (target), AI-like source (excess HF noise + brightness shift), after Global Histogram Match, after Radial Stratified Histogram Match. FFT spectra shown below each image — note how the matched spectra converge toward the target.*
+
+| Parameter | Default | Description |
+|---|---|---|
+| `strength` | 0.75 | 0 = no change, 1 = fully match target magnitude distribution. |
+| `tile_size` | 0 | Tile size for large images. 0 = whole image. |
+| `tile_overlap` | 64 | Tile overlap in pixels. |
+
+---
+
+### Radial Stratified Histogram Match
+
+The frequency-domain equivalent of **CLAHE** — performs histogram matching of FFT magnitudes independently within each radial frequency band.
+
+A global CDF conflates low- and high-frequency coefficients that follow completely different statistical distributions. Per-band matching respects this: each annular ring gets its own CDF mapping, giving accurate per-scale texture transfer.
+
+This is the most expressive spectral matching node in the pack — it simultaneously matches the spectral statistics at every frequency scale independently, requiring no assumptions about the target curve shape (unlike `RadialSpectrumNormalizer`'s 1/f^α model).
+
+| Parameter | Default | Description |
+|---|---|---|
+| `strength` | 0.75 | 0 = no change, 1 = fully match target per-band distribution. |
+| `n_bands` | 16 | Number of radial annuli. 8–24 is a good range. |
+| `preserve_low_freq` | 0.05 | Radius below which bands are skipped — protects global brightness and colour. Raise to 0.15–0.2 for pre-processing. |
+| `tile_size` | 0 | Tile size (leave at 0 for global statistics — tiling changes band statistics). |
+| `tile_overlap` | 64 | Tile overlap in pixels. |
+
+---
+
 ## Future Directions
 
 - **Latent Spectral Manipulator** — apply FFT blending directly in Flux's latent space (16-channel VAE latents) before sampling, bypassing the pixel domain entirely.
