@@ -1,0 +1,236 @@
+{
+  "last_node_id": 13,
+  "last_link_id": 14,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadImage",
+      "pos": [40, 400],
+      "size": {"0": 210, "1": 130},
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {"name": "IMAGE", "type": "IMAGE", "links": [1, 2], "slot_index": 0},
+        {"name": "MASK",  "type": "MASK",  "links": [], "slot_index": 1}
+      ],
+      "properties": {"Node name for S&R": "LoadImage"},
+      "widgets_values": ["example.png", "image"]
+    },
+
+    {
+      "id": 2,
+      "type": "FFTSpectrumVisualizer",
+      "pos": [310, 40],
+      "size": {"0": 280, "1": 230},
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {"name": "image", "type": "IMAGE", "link": 1}
+      ],
+      "outputs": [
+        {"name": "visualization", "type": "IMAGE", "links": [3], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "FFTSpectrumVisualizer"},
+      "widgets_values": ["avg", 15, 3.0, 0.85, 256]
+    },
+
+    {
+      "id": 3,
+      "type": "PreviewImage",
+      "pos": [650, 40],
+      "size": {"0": 210, "1": 60},
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 3}
+      ],
+      "outputs": [],
+      "properties": {"Node name for S&R": "PreviewImage"},
+      "widgets_values": []
+    },
+
+    {
+      "id": 4,
+      "type": "SpectralSpikeSuppressor",
+      "pos": [310, 340],
+      "size": {"0": 280, "1": 190},
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {"name": "image", "type": "IMAGE", "link": 2}
+      ],
+      "outputs": [
+        {"name": "image", "type": "IMAGE", "links": [4], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "SpectralSpikeSuppressor"},
+      "widgets_values": [3.0, 0.85, 15, true]
+    },
+
+    {
+      "id": 5,
+      "type": "RadialSpectrumNormalizer",
+      "pos": [310, 580],
+      "size": {"0": 280, "1": 190},
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {"name": "image", "type": "IMAGE", "link": 4}
+      ],
+      "outputs": [
+        {"name": "image", "type": "IMAGE", "links": [5], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "RadialSpectrumNormalizer"},
+      "widgets_values": [2.0, 0.5, 0.1, 0.05]
+    },
+
+    {
+      "id": 6,
+      "type": "AdaptiveHFCompressor",
+      "pos": [310, 820],
+      "size": {"0": 280, "1": 210},
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {"name": "image", "type": "IMAGE", "link": 5}
+      ],
+      "outputs": [
+        {"name": "image", "type": "IMAGE", "links": [6], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "AdaptiveHFCompressor"},
+      "widgets_values": [0.15, 4.0, 0.05, 0.75, 0.25]
+    },
+
+    {
+      "id": 7,
+      "type": "DirectionalArtifactSuppressor",
+      "pos": [310, 1080],
+      "size": {"0": 280, "1": 210},
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {"name": "image", "type": "IMAGE", "link": 6}
+      ],
+      "outputs": [
+        {"name": "image", "type": "IMAGE", "links": [7], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "DirectionalArtifactSuppressor"},
+      "widgets_values": [3.0, 0.8, 5, 0.05, 180]
+    },
+
+    {
+      "id": 8,
+      "type": "LogSpectrumPeakCompressor",
+      "pos": [310, 1340],
+      "size": {"0": 280, "1": 210},
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {"name": "image", "type": "IMAGE", "link": 7}
+      ],
+      "outputs": [
+        {"name": "image", "type": "IMAGE", "links": [8, 9], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "LogSpectrumPeakCompressor"},
+      "widgets_values": [1.0, 4.0, 0.05, 0.8, "gaussian"]
+    },
+
+    {
+      "id": 9,
+      "type": "FFTSpectrumVisualizer",
+      "pos": [650, 1340],
+      "size": {"0": 280, "1": 230},
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {"name": "image", "type": "IMAGE", "link": 8}
+      ],
+      "outputs": [
+        {"name": "visualization", "type": "IMAGE", "links": [10], "slot_index": 0}
+      ],
+      "properties": {"Node name for S&R": "FFTSpectrumVisualizer"},
+      "widgets_values": ["avg", 15, 3.0, 0.85, 256]
+    },
+
+    {
+      "id": 10,
+      "type": "PreviewImage",
+      "pos": [990, 1340],
+      "size": {"0": 210, "1": 60},
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 10}
+      ],
+      "outputs": [],
+      "properties": {"Node name for S&R": "PreviewImage"},
+      "widgets_values": []
+    },
+
+    {
+      "id": 11,
+      "type": "PreviewImage",
+      "pos": [650, 1620],
+      "size": {"0": 210, "1": 60},
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {"name": "images", "type": "IMAGE", "link": 9}
+      ],
+      "outputs": [],
+      "properties": {"Node name for S&R": "PreviewImage"},
+      "widgets_values": []
+    }
+  ],
+
+  "links": [
+    [1,  1, 0,  2, 0, "IMAGE"],
+    [2,  1, 0,  4, 0, "IMAGE"],
+    [3,  2, 0,  3, 0, "IMAGE"],
+    [4,  4, 0,  5, 0, "IMAGE"],
+    [5,  5, 0,  6, 0, "IMAGE"],
+    [6,  6, 0,  7, 0, "IMAGE"],
+    [7,  7, 0,  8, 0, "IMAGE"],
+    [8,  8, 0,  9, 0, "IMAGE"],
+    [9,  8, 0, 11, 0, "IMAGE"],
+    [10, 9, 0, 10, 0, "IMAGE"]
+  ],
+
+  "groups": [
+    {
+      "title": "INPUT + before spectrum",
+      "bounding": [20, 10, 900, 290],
+      "color": "#3f789e",
+      "font_size": 14
+    },
+    {
+      "title": "Spectral Preprocessing Pipeline",
+      "bounding": [290, 310, 310, 1280],
+      "color": "#5a3f7a",
+      "font_size": 14
+    },
+    {
+      "title": "OUTPUT + after spectrum",
+      "bounding": [630, 1310, 580, 390],
+      "color": "#3f7a5a",
+      "font_size": 14
+    }
+  ],
+
+  "config": {},
+  "extra": {
+    "ds": {"scale": 0.6, "offset": [0, 0]}
+  },
+  "version": 0.4
+}
