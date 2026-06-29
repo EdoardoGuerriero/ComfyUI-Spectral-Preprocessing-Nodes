@@ -230,7 +230,7 @@ class MoisanDecomposition:
 
         # v can be negative (it's a correction field) — clamp u to [0,1] only;
         # output v as-is shifted to [0,1] for visualisation (it's nearly flat)
-        v_vis = (smooth_arr - smooth_arr.min()) / (smooth_arr.ptp() + 1e-8)
+        v_vis = (smooth_arr - smooth_arr.min()) / (smooth_arr.max() - smooth_arr.min() + 1e-8)
 
         return (
             numpy_to_tensor(clamp01(out_arr)),
